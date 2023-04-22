@@ -52,6 +52,13 @@ def browse_website(url: str, question: str) -> tuple[str, WebDriver]:
     close_browser(driver)
     return f"Answer gathered from website: {summary_text} \n \n Links: {links}", driver
 
+    if "captcha" in driver.page_source.lower() or "i am not a robot" in driver.page_source.lower() or "cookie" in driver.page_source.lower():
+        try:
+            accept_cookies_button = driver.find_element_by_xpath("//button[contains(text(), 'Accept') or contains(text(), 'I accept') or contains(text(), 'Agree') or contains(text(), 'OK')]")
+            accept_cookies_button.click()
+        except:
+            pass
+        input("Please complete the CAPTCHA, 'I am not a robot' check, or accept the cookies and press Enter to continue...")
 
 def scrape_text_with_selenium(url: str) -> tuple[WebDriver, str]:
     """Scrape text from a website using selenium
